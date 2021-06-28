@@ -3,7 +3,7 @@
 [infinite scroll part2 -lozad-](https://www.npmjs.com/package/lozad)
 
 ## 学んだこと
-
+- unobserveを自動で行ってくれる。ただ、同じ要素を何度もobserveする方法が分からなかった
 ## Project setup
 ```
 yarn install

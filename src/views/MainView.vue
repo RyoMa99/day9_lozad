@@ -7,7 +7,9 @@
       <h2>{{ post.id }}:{{ post.title }}</h2>
       <p>{{ post.body }}</p>
     </div>
-    <div ref="observeElement">
+    <div
+      class="lozad"
+    >
       この要素を監視します
     </div>
   </div>
@@ -15,12 +17,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import lozad from 'lozad'
 import { fetchPosts } from '@/api/request'
 import { Post } from '@/api/types'
 
 @Component({})
 export default class extends Vue {
-  observer: IntersectionObserver | null = null
+  observer: lozad.Observer | null = null
   posts: Post[] = []
   page = 1
   $refs! : {
@@ -28,22 +31,12 @@ export default class extends Vue {
   }
 
   mounted (): void {
-    // 100件全て取得される
-    // fetchPosts(1)
-    this.observer = new IntersectionObserver((entries) => {
-      const entry = entries[0]
-      // console.log(entry)
-      if (entry?.isIntersecting) {
-        // 監視対象がブラウザに入った時の処理
-        console.log('画面に入ったよ')
+    this.observer = lozad('.lozad', {
+      loaded: () => {
         this.getPosts()
       }
     })
-    const observeElement = this.$refs.observeElement
-    // $refsの型定義でElementだと指定して置けばいらない
-    // if (!(observeElement instanceof Element)) return
-    // observerに監視対象を登録
-    this.observer.observe(observeElement)
+    this.observer.observe()
   }
 
   async getPosts (): Promise<void> {
